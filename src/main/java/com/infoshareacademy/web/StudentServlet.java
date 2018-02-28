@@ -34,11 +34,19 @@ public class StudentServlet extends HttpServlet {
         super.init(config);
 
         // Test data
+
+        // Computers
+        Computer c1 = new Computer("HP8460P", "Windows XP");
+        computerDao.save(c1);
+
+        Computer c2 = new Computer("Dell Inspiron 1234", "Ubuntu Linux");
+        computerDao.save(c2);
+
         // Students
-        studentDao.save(new Student("Michal", "Kowalski", LocalDate.of(1980, 07, 05)
-                , computerDao.update(new Computer("Dell", "Ubuntu"))));
-        studentDao.save(new Student("Marek", "Stankiewicz", LocalDate.of(1988, 12, 24)
-                , computerDao.update(new Computer("Asus", "Windows 10"))));
+        studentDao.save(
+            new Student("Michal", "Nowak", LocalDate.of(2000, 2, 14), c1));
+        studentDao.save(
+            new Student("Marek", "Kowalski", LocalDate.of(1989, 12, 24), c2));
 
         LOG.info("System time zone is: {}", ZoneId.systemDefault());
     }
@@ -77,6 +85,13 @@ public class StudentServlet extends HttpServlet {
             LOG.info("No Student found for id = {}, nothing to be updated", id);
         } else {
             existingStudent.setName(req.getParameter("name"));
+            existingStudent.setSurname(req.getParameter("surname"));
+            existingStudent.setDateOfBirth(LocalDate.parse(req.getParameter("dateOfBirth")));
+
+            final Long computerId = Long.parseLong(req.getParameter("computerId"));
+            final Computer computer = computerDao.findById(computerId);
+            LOG.info("Found Computer with id {}: {}", computerId, computer);
+            existingStudent.setComputer(computer);
 
             studentDao.update(existingStudent);
             LOG.info("Student object updated: {}", existingStudent);
@@ -92,8 +107,13 @@ public class StudentServlet extends HttpServlet {
         final Student p = new Student();
         p.setName(req.getParameter("name"));
         p.setSurname(req.getParameter("surname"));
-        p.setDateOfBirth(LocalDate.parse(req.getParameter("dateofbirth")));
-        p.setComputer(req.getParameter("computer_id"));
+        p.setDateOfBirth(LocalDate.parse(req.getParameter("dateOfBirth")));
+
+        final Long computerId = Long.parseLong(req.getParameter("computerId"));
+        final Computer computer = computerDao.findById(computerId);
+        LOG.info("Found Computer with id {}: {}", computerId, computer);
+        p.setComputer(computer);
+
         studentDao.save(p);
         LOG.info("Saved a new Student object: {}", p);
 

@@ -1,8 +1,12 @@
 package com.infoshareacademy.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "COMPUTERS")
@@ -13,22 +17,15 @@ public class Computer {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 32)
+    @NotNull
     private String name;
 
-    @Column(name = "operatingsystem")
+    @Column(name = "operating_system", length = 64)
+    @NotNull
     private String operatingSystem;
 
-
     public Computer() {
-
-    }
-    public String getOperatingSystem() {
-        return operatingSystem;
-    }
-
-    public void setOperatingSystem(String operatingSystem) {
-        this.operatingSystem = operatingSystem;
     }
 
     public Computer(String name, String operatingSystem) {
@@ -50,6 +47,14 @@ public class Computer {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOperatingSystem() {
+        return operatingSystem;
+    }
+
+    public void setOperatingSystem(String operatingSystem) {
+        this.operatingSystem = operatingSystem;
     }
 
     @Override

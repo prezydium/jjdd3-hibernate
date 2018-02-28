@@ -1,13 +1,11 @@
 package com.infoshareacademy.dao;
 
 import com.infoshareacademy.model.Computer;
-import com.infoshareacademy.model.Student;
-
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.List;
 
 @Stateless
 public class ComputerDao {
@@ -15,19 +13,19 @@ public class ComputerDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Long save(Computer computer) {
-        entityManager.persist(computer);
-        return computer.getId();
+    public Long save(Computer c) {
+        entityManager.persist(c);
+        return c.getId();
     }
 
-    public Computer update(Computer computer) {
-        return entityManager.merge(computer);
+    public Computer update(Computer c) {
+        return entityManager.merge(c);
     }
 
     public void delete(Long id) {
-        final Computer computer = entityManager.find(Computer.class, id);
-        if (computer != null) {
-            entityManager.remove(computer);
+        final Computer c = entityManager.find(Computer.class, id);
+        if (c != null) {
+            entityManager.remove(c);
         }
     }
 
@@ -36,9 +34,8 @@ public class ComputerDao {
     }
 
     public List<Computer> findAll() {
-        final Query query = entityManager.createQuery("SELECT computer FROM Computer computer");
+        final Query query = entityManager.createQuery("SELECT s FROM Computer s");
 
         return query.getResultList();
     }
-
 }

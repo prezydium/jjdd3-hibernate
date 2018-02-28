@@ -1,8 +1,15 @@
 package com.infoshareacademy.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "STUDENTS")
@@ -18,18 +25,42 @@ public class Student {
     private String name;
 
     @Column(name = "surname")
+    @NotNull
     private String surname;
 
-    @Column(name = "dateofbirth")
+    @Column(name = "date_of_birth")
+    @NotNull
     private LocalDate dateOfBirth;
 
     @OneToOne
     @JoinColumn(name = "computer_id", unique = true)
     private Computer computer;
 
-
     public Student() {
 
+    }
+
+    public Student(String name, String surname, LocalDate dateOfBirth, Computer computer) {
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.computer = computer;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSurname() {
@@ -56,29 +87,6 @@ public class Student {
         this.computer = computer;
     }
 
-    public Student(String name, String surname, LocalDate dateOfBirth, Computer computer) {
-        this.name = name;
-        this.surname = surname;
-        this.dateOfBirth = dateOfBirth;
-        this.computer = computer;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("Student{");
@@ -86,7 +94,7 @@ public class Student {
         sb.append(", name='").append(name).append('\'');
         sb.append(", surname='").append(surname).append('\'');
         sb.append(", dateOfBirth=").append(dateOfBirth);
-        sb.append(", computer=").append(computer);
+        sb.append(", computerId=").append(computer.getId());
         sb.append('}');
         return sb.toString();
     }
