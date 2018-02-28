@@ -1,11 +1,12 @@
 package com.infoshareacademy.web;
 
-import com.infoshareacademy.dao.StudentDao;
-import com.infoshareacademy.model.Student;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.List;
+import com.infoshareacademy.dao.ComputerDao;
+import com.infoshareacademy.dao.ComputerDao;
+import com.infoshareacademy.model.Computer;
+import com.infoshareacademy.model.Computer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,25 +14,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
 
-@WebServlet(urlPatterns = "/student")
-public class StudentServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/computer")
+public class ComputerServlet extends HttpServlet {
 
-    private Logger LOG = LoggerFactory.getLogger(StudentServlet.class);
+    private Logger LOG = LoggerFactory.getLogger(ComputerServlet.class);
 
     @Inject
-    private StudentDao studentDao;
+    private ComputerDao computerDao;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
-        // Test data
-        // Students
-        studentDao.save(new Student("Michal"));
-        studentDao.save(new Student("Marek"));
+        computerDao.save(new Computer("ROG ASUS", "Windows"));
+        computerDao.save(new Computer("KompWyniesionyZUrzedu", "DOS"));
 
         LOG.info("System time zone is: {}", ZoneId.systemDefault());
     }
@@ -50,64 +50,63 @@ public class StudentServlet extends HttpServlet {
         if (action.equals("findAll")) {
             findAll(req, resp);
         } else if (action.equals("add")) {
-            addStudent(req, resp);
+            addComputer(req, resp);
         } else if (action.equals("delete")) {
-            deleteStudent(req, resp);
+            deleteComputer(req, resp);
         } else if (action.equals("update")) {
-            updateStudent(req, resp);
+            updateComputer(req, resp);
         } else {
             resp.getWriter().write("Unknown action.");
         }
     }
 
-    private void updateStudent(HttpServletRequest req, HttpServletResponse resp)
+    private void updateComputer(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
         final Long id = Long.parseLong(req.getParameter("id"));
-        LOG.info("Updating Student with id = {}", id);
+        LOG.info("Updating Computer with id = {}", id);
 
-        final Student existingStudent = studentDao.findById(id);
-        if (existingStudent == null) {
-            LOG.info("No Student found for id = {}, nothing to be updated", id);
+        final Computer existingComputer = computerDao.findById(id);
+        if (existingComputer == null) {
+            LOG.info("No Computer found for id = {}, nothing to be updated", id);
         } else {
-            existingStudent.setName(req.getParameter("name"));
+            existingComputer.setName(req.getParameter("name"));
 
-            studentDao.update(existingStudent);
-            LOG.info("Student object updated: {}", existingStudent);
+            computerDao.update(existingComputer);
+            LOG.info("Computer object updated: {}", existingComputer);
         }
 
         // Return all persisted objects
         findAll(req, resp);
     }
 
-    private void addStudent(HttpServletRequest req, HttpServletResponse resp)
+    private void addComputer(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
 
-        final Student p = new Student();
+        final Computer p = new Computer();
         p.setName(req.getParameter("name"));
-        p.setSurname(req.getParameter("surname"));
-        p.setDateOfBirth(LocalDate.parse(req.getParameter("dateofbirth")));
+        p.setOperatingSystem(req.getParameter("operatingsystem"));
 
-        studentDao.save(p);
-        LOG.info("Saved a new Student object: {}", p);
+        computerDao.save(p);
+        LOG.info("Saved a new Computer object: {}", p);
 
         // Return all persisted objects
         findAll(req, resp);
     }
 
-    private void deleteStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void deleteComputer(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         final Long id = Long.parseLong(req.getParameter("id"));
-        LOG.info("Removing Student with id = {}", id);
+        LOG.info("Removing Computer with id = {}", id);
 
-        studentDao.delete(id);
+        computerDao.delete(id);
 
         // Return all persisted objects
         findAll(req, resp);
     }
 
     private void findAll(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        final List<Student> result = studentDao.findAll();
+        final List<Computer> result = computerDao.findAll();
         LOG.info("Found {} objects", result.size());
-        for (Student p : result) {
+        for (Computer p : result) {
             resp.getWriter().write(p.toString() + "\n");
         }
     }
