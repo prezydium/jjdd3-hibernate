@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "STUDENTS")
@@ -21,8 +22,31 @@ public class Student {
     @NotNull
     private String name;
 
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "dateofbirth")
+    private LocalDate dateOfBirth;
+
+
     public Student() {
 
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public Student(String name) {
@@ -50,6 +74,8 @@ public class Student {
         final StringBuffer sb = new StringBuffer("Student{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
+        sb.append(", surname='").append(surname).append('\'');
+        sb.append(", dateofbirth='").append(dateOfBirth).append('\'');
         sb.append('}');
         return sb.toString();
     }
