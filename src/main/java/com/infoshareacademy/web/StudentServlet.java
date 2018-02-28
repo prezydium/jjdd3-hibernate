@@ -1,6 +1,8 @@
 package com.infoshareacademy.web;
 
+import com.infoshareacademy.dao.ComputerDao;
 import com.infoshareacademy.dao.StudentDao;
+import com.infoshareacademy.model.Computer;
 import com.infoshareacademy.model.Student;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,11 +26,21 @@ public class StudentServlet extends HttpServlet {
     @Inject
     private StudentDao studentDao;
 
+    @Inject
+    private ComputerDao computerDao;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         // Test data
+
+        // Computers
+        computerDao.save(
+            new Computer("HP8460P", "Windows XP"));
+        computerDao.save(
+            new Computer("Dell Inspiron 1234", "Ubuntu Linux"));
+
         // Students
         studentDao.save(
             new Student("Michal", "Nowak", LocalDate.of(2000, 2, 14)));
