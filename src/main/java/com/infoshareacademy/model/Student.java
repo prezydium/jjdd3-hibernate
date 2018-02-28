@@ -1,14 +1,7 @@
 package com.infoshareacademy.model;
 
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -36,15 +29,21 @@ public class Student {
     @JoinColumn(name = "computer_id", unique = true)
     private Computer computer;
 
+    @ManyToOne
+    @JoinColumn(name = "adress")
+    private Adress adress;
+
+
     public Student() {
 
     }
 
-    public Student(String name, String surname, LocalDate dateOfBirth, Computer computer) {
+    public Student(String name, String surname, LocalDate dateOfBirth, Computer computer, Adress adress) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.computer = computer;
+        this.adress = adress;
     }
 
     public Long getId() {
@@ -94,7 +93,8 @@ public class Student {
         sb.append(", name='").append(name).append('\'');
         sb.append(", surname='").append(surname).append('\'');
         sb.append(", dateOfBirth=").append(dateOfBirth);
-        sb.append(", computerId=").append(computer.getId());
+        sb.append(", computer=").append(computer);
+        sb.append(", adress=").append(adress);
         sb.append('}');
         return sb.toString();
     }

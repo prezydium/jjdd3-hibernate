@@ -1,7 +1,9 @@
 package com.infoshareacademy.web;
 
+import com.infoshareacademy.dao.AdressDao;
 import com.infoshareacademy.dao.ComputerDao;
 import com.infoshareacademy.dao.StudentDao;
+import com.infoshareacademy.model.Adress;
 import com.infoshareacademy.model.Computer;
 import com.infoshareacademy.model.Student;
 import java.io.IOException;
@@ -29,6 +31,9 @@ public class StudentServlet extends HttpServlet {
     @Inject
     private ComputerDao computerDao;
 
+    @Inject
+    private AdressDao adressDao;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -42,11 +47,21 @@ public class StudentServlet extends HttpServlet {
         Computer c2 = new Computer("Dell Inspiron 1234", "Ubuntu Linux");
         computerDao.save(c2);
 
+        //Adress
+        Adress adress1 = new Adress("Nowe Ogrody 8/12", "Gdansk");
+        Adress adress2 = new Adress("Szafarnia 5/12", "Gdansk");
+        Adress adress3 = new Adress("Topolowa 4", "Gdansk");
+        adressDao.save(adress1);
+        adressDao.save(adress3);
+        adressDao.save(adress2);
+
         // Students
         studentDao.save(
-            new Student("Michal", "Nowak", LocalDate.of(2000, 2, 14), c1));
+            new Student("Michal", "Nowak", LocalDate.of(2000, 2, 14), c1, adress1));
         studentDao.save(
-            new Student("Marek", "Kowalski", LocalDate.of(1989, 12, 24), c2));
+            new Student("Marek", "Kowalski", LocalDate.of(1989, 12, 24), c2, adress3));
+        studentDao.save(
+            new Student("Janek", "Stogowy", LocalDate.of(1960, 1, 3), c2, adress1));
 
         LOG.info("System time zone is: {}", ZoneId.systemDefault());
     }
