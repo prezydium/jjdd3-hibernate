@@ -36,16 +36,17 @@ public class StudentServlet extends HttpServlet {
         // Test data
 
         // Computers
-        computerDao.save(
-            new Computer("HP8460P", "Windows XP"));
-        computerDao.save(
-            new Computer("Dell Inspiron 1234", "Ubuntu Linux"));
+        Computer c1 = new Computer("HP8460P", "Windows XP");
+        computerDao.save(c1);
+
+        Computer c2 = new Computer("Dell Inspiron 1234", "Ubuntu Linux");
+        computerDao.save(c2);
 
         // Students
         studentDao.save(
-            new Student("Michal", "Nowak", LocalDate.of(2000, 2, 14)));
+            new Student("Michal", "Nowak", LocalDate.of(2000, 2, 14), c1));
         studentDao.save(
-            new Student("Marek", "Kowalski", LocalDate.of(1989, 12, 24)));
+            new Student("Marek", "Kowalski", LocalDate.of(1989, 12, 24), c2));
 
         LOG.info("System time zone is: {}", ZoneId.systemDefault());
     }
@@ -87,6 +88,11 @@ public class StudentServlet extends HttpServlet {
             existingStudent.setSurname(req.getParameter("surname"));
             existingStudent.setDateOfBirth(LocalDate.parse(req.getParameter("dateOfBirth")));
 
+            final Long computerId = Long.parseLong(req.getParameter("computerId"));
+            final Computer computer = computerDao.findById(computerId);
+            LOG.info("Found Computer with id {}: {}", computerId, computer);
+            existingStudent.setComputer(computer);
+
             studentDao.update(existingStudent);
             LOG.info("Student object updated: {}", existingStudent);
         }
@@ -102,6 +108,11 @@ public class StudentServlet extends HttpServlet {
         p.setName(req.getParameter("name"));
         p.setSurname(req.getParameter("surname"));
         p.setDateOfBirth(LocalDate.parse(req.getParameter("dateOfBirth")));
+
+        final Long computerId = Long.parseLong(req.getParameter("computerId"));
+        final Computer computer = computerDao.findById(computerId);
+        LOG.info("Found Computer with id {}: {}", computerId, computer);
+        p.setComputer(computer);
 
         studentDao.save(p);
         LOG.info("Saved a new Student object: {}", p);
